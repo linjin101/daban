@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Flask AJAX Example</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"> 
+        $.ajax({
+            url: 'http://127.0.0.1:5000/getData',
+            type: 'GET',
+            success: function(response) {
+                $('#data').text(JSON.stringify(response));
+                console.log(JSON.stringify(response));
+            }
+        });
+    </script>
+</head>
+<body>
+    <div id="data"></div>
+
+
+</body>
+</html>

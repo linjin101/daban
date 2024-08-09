@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CentOS Terminal</title>
+<style>
+     #pl {
+        display: flex; /* 启用Flexbox布局 */
+     }
+    #terminal {
+        font-family: monospace;
+        font-size: 1em;
+        /* width: 600px; */
+        width: 50%;
+        height: 400px;
+        border: 1px solid #000;
+        overflow: scroll;
+        padding: 5px;
+        margin: 10px;
+        background: #000;
+        color: #fff;
+    }
+    #terminal2 {
+        font-family: monospace;
+        font-size: 1em;
+        /* width: 600px; */
+        width: 50%;
+        height: 400px;
+        border: 1px solid #000;
+        overflow: scroll;
+        padding: 5px;
+        margin: 10px;
+        background: #000;
+        color: #fff;
+    }
+    
+</style>
+<script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/1.9.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+      $("#btn1").click(function(){
+        alert("Text: " + $("#test").text());
+      });
+      $("#btn2").click(function(){
+        alert("HTML: " + $("#test").html());
+      });
+    });
+    </script>
+<script> 
+    // 模拟命令行输出
+    function simulateCommand(terminal,command) {
+        var terminal = document.getElementById(terminal);
+        terminal.innerHTML += '$ ' + command + '<br>';
+
+        // $('#'+terminal).html('$ ' + command + '<br>');
+        // 这里可以添加逻辑来执行命令并获取输出
+        // terminal.innerHTML += '<br>输出: 模拟命令执行结果<br>';
+    }
+ 
+    // 模拟用户输入命令
+    setInterval(function(){
+        var date = new Date();
+        $.ajax({
+                url: 'http://{{userconfig.ipconfig}}/getData', // 接口URL
+                type: 'GET', // 请求类型，可以是GET、POST等
+                dataType: 'text', // 预期服务器返回的数据类型
+                success: function(response) {
+                    // simulateCommand('cmd..........'+new Date()+response);
+                    simulateCommand('terminal',date.toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'})+'\r\n<br>'+response);
+                    var $div = $('#terminal');  
+                    $div.scrollTop($div[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
+                    // 请求成功后的回调函数
+                    console.log('数据获取成功:', response);
+                    // 这里可以处理获取到的数据，例如显示在页面上等
+                },
+                error: function(xhr, status, error) {
+                    // 请求失败后的回调函数
+                    console.error('数据获取失败:', error);
+                }
+            });
+
+            $.ajax({
+                url: 'http://{{userconfig.ipconfig}}/getData2', // 接口URL
+                type: 'GET', // 请求类型，可以是GET、POST等
+                dataType: 'text', // 预期服务器返回的数据类型
+                success: function(response) {
+                    // simulateCommand('cmd..........'+new Date()+response);
+                    simulateCommand('terminal2',date.toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'})+'\r\n<br>'+response);
+                    var $div = $('#terminal2');  
+                    $div.scrollTop($div[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
+                    // 请求成功后的回调函数
+                    console.log('数据获取成功:', response);
+                    // 这里可以处理获取到的数据，例如显示在页面上等
+                },
+                error: function(xhr, status, error) {
+                    // 请求失败后的回调函数
+                    console.error('数据获取失败:', error);
+                }
+            });
+    
+        },5000
+    );
+    // simulateCommand('{{ cmdlist }}');
+</script>
+</head>
+<body>
+
+    <p id="test">这是段落中的 <b>粗体</b> 文本。</p>
+<button id="btn1">显示文本</button>
+<button id="btn2">显示 HTML</button>
+ 
+<div id="pl">
+<div id="terminal"></div>
+ 
+<div id="terminal2"></div>
+</div>
+
+</body>
+</html>
