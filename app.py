@@ -3,7 +3,12 @@ import caiji2
 
 
 app = Flask(__name__)
-ipconfig = '192.168.1.2:5000'
+# 服务器配置
+ipconfig = '127.0.0.1:5000'
+ipconfigHtml = 'sanhu918.com:5555'
+# 本地调试配置
+ipconfig = '127.0.0.1:5000'
+ipconfigHtml = ipconfig
 app.config['SERVER_NAME'] = ipconfig
 
 
@@ -43,7 +48,7 @@ def data2():
 
 @app.route('/')
 def index():
-    userconfig = {'ipconfig': ipconfig}  
+    userconfig = {'ipconfig': ipconfigHtml}  
     return render_template('index2.html',userconfig=userconfig)
 
 # @app.route('/process_input', methods=['POST'])
