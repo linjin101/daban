@@ -3,7 +3,7 @@ import caiji2
 
 
 app = Flask(__name__)
-ipconfig = '192.168.10.3:5000'
+ipconfig = '192.168.1.2:5000'
 app.config['SERVER_NAME'] = ipconfig
 
 

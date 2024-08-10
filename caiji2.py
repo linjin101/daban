@@ -31,8 +31,8 @@ def getStockInc(rstock):
     rdate = time.strftime( "%Y-%m-%d", time.localtime() )
     rvalue = r.get(rdate+':'+rstock)
     if rvalue is not None:  
-        value_str = rvalue.decode('utf-8')  
-    return int(value_str)
+        rvalue = int(rvalue.decode('utf-8'))
+    return rvalue
 
 # 多个股票列表整理,股票代码加上.SZ .SH
 def tscodelist(stocklist): 
