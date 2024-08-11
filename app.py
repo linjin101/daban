@@ -6,27 +6,10 @@ app = Flask(__name__)
 # 服务器配置
 ipconfig = '127.0.0.1:5000'
 ipconfigHtml = 'sanhu918.com:5555'
-# 本地调试配置
-ipconfig = '127.0.0.1:5000'
-ipconfigHtml = ipconfig
+# # 本地调试配置
+# ipconfig = '127.0.0.1:5000'
+# ipconfigHtml = ipconfig
 app.config['SERVER_NAME'] = ipconfig
-
-
-cmdlist = 'jinja2.exceptions.TemplateNotFound: index2.html \
-127.0.0.1 - - [30/Jul/2024 16:43:29] "GET /?__debugger__=yes&cmd=resource&f=style.css HTTP/1.1" 304 - \
-127.0.0.1 - - [30/Jul/2024 16:43:29] "GET /?__debugger__=yes&cmd=resource&f=debugger.js HTTP/1.1" 304 - \
-127.0.0.1 - - [30/Jul/2024 16:43:29] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 304 - \
-127.0.0.1 - - [30/Jul/2024 16:43:29] "GET /?__debugger__=yes&cmd=resource&f=console.png HTTP/1.1" 304 - \
-127.0.0.1 - - [30/Jul/2024 16:43:43] "GET / HTTP/1.1" 200 - \
- * Detected change in  C:\\Python\\project\\gpcj\\flask\\app.py , reloading \
- * Restarting with stat \
- * Debugger is active! \
- * Debugger PIN: 545-969-117 \
- * Detected change in  C:\\Python\\project\\gpcj\\flask\\app.py , reloading \
- * Restarting with stat \
- * Debugger is active! \
- * Debugger PIN: 545-969-117'
- 
 
 @app.route('/getData')
 def data():
@@ -42,6 +25,15 @@ def data2():
     # 假设这是你要通过AJAX获取的数据
     # response_data = '假设这是你要通过AJAX获取的数据'
     response_data = caiji2.reList(2)
+    return response_data
+    # response_data = {'key': 'dddd'}
+    # return jsonify(response_data)
+
+@app.route('/getData3')
+def data3():
+    # 假设这是你要通过AJAX获取的数据
+    # response_data = '假设这是你要通过AJAX获取的数据'
+    response_data = caiji2.reList(3)
     return response_data
     # response_data = {'key': 'dddd'}
     # return jsonify(response_data)

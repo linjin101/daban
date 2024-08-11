@@ -21,6 +21,8 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 stockZtList1 = []
 # 涨停封板
 stockZtList2 = []
+# 涨停封板
+stockZtList3 = []
 
 # redis累加
 def stockInc(rstock):
@@ -144,7 +146,7 @@ def szzt( urlsh ,dbType=1):
 
             # 封板显示
             if dbType == 2:
-                if stockMcj == 0.0 and stcokName[0:2] != 'ST' and stcokName[0:3] != '*ST'  and stcokName[0:1] != 'C'   and stcokName[0:1] != 'N':
+                if stockMcj == 0.0 and ( stockCode[4:6] == '00' or stockCode[4:6] == '60' ) and stcokName[0:2] != 'ST' and stcokName[0:3] != '*ST'  and stcokName[0:1] != 'C'   and stcokName[0:1] != 'N':
                     # stockZtList.append(stockCode[4:],stcokName,stockZf) 
                     stockZtList2.append( [ stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] )
                     # stockZtList = [stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] # 股票价格列表放到数组
@@ -152,7 +154,22 @@ def szzt( urlsh ,dbType=1):
                     # print(stockCode[4:],stcokName,stockZf,stockMcj)  
                     strRepost +=  str(stockCode[4:])+','+str(stcokName)+','+str(stockZf)+' | \r\n'
                     stockInc(stockCode[4:])
-                    if iLine % 4 == 0:  
+                    if iLine % 2 == 0:  
+                       strRepost += '<br>'      
+                    i = i + 1
+                    iLine = iLine + 1
+
+            # 创业板显示 and stockCode[4:2] == '30' 
+            if dbType == 3:
+                if stockMcj == 0.0 and ( stockCode[4:6] == '30' or stockCode[4:6] == '68' ) and stcokName[0:2] != 'ST' and stcokName[0:3] != '*ST'  and stcokName[0:1] != 'C'   and stcokName[0:1] != 'N':
+                    # stockZtList.append(stockCode[4:],stcokName,stockZf) 
+                    stockZtList3.append( [ stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] )
+                    # stockZtList = [stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] # 股票价格列表放到数组
+                    # arr.array(i,stockZtList) 
+                    # print(stockCode[4:],stcokName,stockZf,stockMcj)  
+                    strRepost +=  str(stockCode[4:])+','+str(stcokName)+','+str(stockZf)+' | \r\n'
+                    stockInc(stockCode[4:])
+                    if iLine % 2 == 0:  
                        strRepost += '<br>'      
                     i = i + 1
                     iLine = iLine + 1
@@ -203,12 +220,16 @@ def reList(dbType=1):
 
 print( reList(1) )
 print( reList(2) )
+print( reList(3) )
 
 
-print('---------------------------------------------------')
-stockZtList1 = sorted(stockZtList1, key=lambda x: (x[1], x[0]))  
-print(stockZtList1)
-print('---------------------------------------------------')
-stockZtList2 = sorted(stockZtList2, key=lambda x: (x[1], x[0]))  
-print(stockZtList2)
-print('---------------------------------------------------')
+# print('---------------------------------------------------')
+# stockZtList1 = sorted(stockZtList1, key=lambda x: (x[1], x[0]))  
+# print(stockZtList1)
+# print('---------------------------------------------------')
+# stockZtList2 = sorted(stockZtList2, key=lambda x: (x[1], x[0]))  
+# print(stockZtList2)
+# print('---------------------------------------------------')
+# stockZtList3 = sorted(stockZtList3, key=lambda x: (x[1], x[0]))  
+# print(stockZtList3)
+# print('---------------------------------------------------')

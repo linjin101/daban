@@ -13,7 +13,7 @@
         font-size: 1em;
         /* width: 600px; */
         width: 50%;
-        height: 400px;
+        height: 600px;
         border: 1px solid #000;
         overflow: scroll;
         padding: 5px;
@@ -26,7 +26,20 @@
         font-size: 1em;
         /* width: 600px; */
         width: 50%;
-        height: 400px;
+        height: 600px;
+        border: 1px solid #000;
+        overflow: scroll;
+        padding: 5px;
+        margin: 10px;
+        background: #000;
+        color: #fff;
+    }
+    #terminal3 {
+        font-family: monospace;
+        font-size: 1em;
+        /* width: 600px; */
+        width: 50%;
+        height: 600px;
         border: 1px solid #000;
         overflow: scroll;
         padding: 5px;
@@ -48,11 +61,14 @@
     });
     </script>
 <script> 
+    iclear = 0;
     // 模拟命令行输出
     function simulateCommand(terminal,command) {
         var terminal = document.getElementById(terminal);
-        terminal.innerHTML += '$ ' + command + '<br>';
-
+        if ( iclear % 6 == 0){
+            terminal.innerHTML = '';
+        }
+        terminal.innerHTML += '$ ' + command + '<br><br>';
         // $('#'+terminal).html('$ ' + command + '<br>');
         // 这里可以添加逻辑来执行命令并获取输出
         // terminal.innerHTML += '<br>输出: 模拟命令执行结果<br>';
@@ -66,10 +82,11 @@
                 type: 'GET', // 请求类型，可以是GET、POST等
                 dataType: 'text', // 预期服务器返回的数据类型
                 success: function(response) {
+                    // simulateCommandClear();
                     // simulateCommand('cmd..........'+new Date()+response);
                     simulateCommand('terminal',date.toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'})+'\r\n<br>'+response);
-                    var $div = $('#terminal');  
-                    $div.scrollTop($div[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
+                    var $div1 = $('#terminal');  
+                    $div1.scrollTop($div1[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
                     // 请求成功后的回调函数
                     console.log('数据获取成功:', response);
                     // 这里可以处理获取到的数据，例如显示在页面上等
@@ -85,10 +102,11 @@
                 type: 'GET', // 请求类型，可以是GET、POST等
                 dataType: 'text', // 预期服务器返回的数据类型
                 success: function(response) {
+                    // simulateCommandClear();
                     // simulateCommand('cmd..........'+new Date()+response);
                     simulateCommand('terminal2',date.toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'})+'\r\n<br>'+response);
-                    var $div = $('#terminal2');  
-                    $div.scrollTop($div[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
+                    var $div2 = $('#terminal2');
+                    $div2.scrollTop($div2[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
                     // 请求成功后的回调函数
                     console.log('数据获取成功:', response);
                     // 这里可以处理获取到的数据，例如显示在页面上等
@@ -98,15 +116,39 @@
                     console.error('数据获取失败:', error);
                 }
             });
-    
-        },5000
+
+            $.ajax({
+                url: 'http://{{userconfig.ipconfig}}/getData3', // 接口URL
+                type: 'GET', // 请求类型，可以是GET、POST等
+                dataType: 'text', // 预期服务器返回的数据类型
+                success: function(response) {
+                    // simulateCommandClear();
+                    // simulateCommand('cmd..........'+new Date()+response);
+                    simulateCommand('terminal3',date.toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'})+'\r\n<br>'+response);
+                    var $div3 = $('#terminal3');
+                    $div3.scrollTop($div3[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
+                    // 请求成功后的回调函数
+                    console.log('数据获取成功:', response);
+                    // 这里可以处理获取到的数据，例如显示在页面上等
+                },
+                error: function(xhr, status, error) {
+                    // 请求失败后的回调函数
+                    console.error('数据获取失败:', error);
+                }
+            });
+
+
+
+            iclear++;
+        },6000
     );
+    
     // simulateCommand('{{ cmdlist }}');
 </script>
 </head>
 <body>
 
-    <p id="test">这是段落中的 <b>粗体</b> 文本。</p>
+<p id="test">这是段落中的 <b>粗体</b> 文本。</p>
 <button id="btn1">显示文本</button>
 <button id="btn2">显示 HTML</button>
  
@@ -114,6 +156,8 @@
 <div id="terminal"></div>
  
 <div id="terminal2"></div>
+
+<div id="terminal3"></div>
 </div>
 
 </body>
