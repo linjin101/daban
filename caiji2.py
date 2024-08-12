@@ -17,12 +17,6 @@ urlsh = 'http://xici.compass.cn/stock/newsort.php?market=sh&type=A&sort=ratio&or
 # 深证
 urlsz = 'http://xici.compass.cn/stock/newsort.php?market=sz&type=A&sort=ratio&order=desc&cls=2'
 r = redis.StrictRedis(host='localhost', port=6379, db=0)
-# 接近涨停
-stockZtList1 = []
-# 涨停封板
-stockZtList2 = []
-# 涨停封板
-stockZtList3 = []
 
 # redis累加
 def stockInc(rstock):
@@ -82,6 +76,8 @@ def zrzt(ts_zrjg):
 
 # 股票涨幅排行榜，首板、N格，回封，神秘里面概念，情绪，老鸭头切片，MA60
 def szzt( urlsh ,dbType=1):
+    #返回涨停列表
+    stockZtList = []
     strRepost = ''
     # 发送HTTP GET请求  
     response = requests.get(urlsh)
@@ -103,7 +99,7 @@ def szzt( urlsh ,dbType=1):
         
         # 使用eval()解析修正后的字符串（注意：eval()在处理不受信任的输入时是不安全的）  
         data = eval(fixed_str)  
-        
+        # print(data)
         # print('-----------------------------------')
         # 格式化成2016-03-20 11:45:39形式
         # print(time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()) )
@@ -131,12 +127,9 @@ def szzt( urlsh ,dbType=1):
             # print(stockCode,stockZf,stcokPriceNum)
             if dbType == 1:
                 if istockZf > stcokPriceNum and stockMcj != 0.0 and stcokName[0:2] != 'ST' and stcokName[0:3] != '*ST'  and stcokName[0:1] != 'C'   and stcokName[0:1] != 'N':
-                    # stockZtList.append(stockCode[4:],stcokName,stockZf) 
                     # 股票价格列表放到数组
-                    stockZtList1.append( [ stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] )
-                    # arr.array(i,stockZtList) 
-                    
-                    # print(stockCode[4:],stcokName,stockZf,stockMcj)  
+                    stockZtList.append( [ stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] )
+
                     strRepost +=  str(stockCode[4:])+','+str(stcokName)+','+str(stockZf)+' | \r\n'
                     stockInc(stockCode[4:])
                     if iLine % 4 == 0:  
@@ -147,11 +140,8 @@ def szzt( urlsh ,dbType=1):
             # 封板显示
             if dbType == 2:
                 if stockMcj == 0.0 and ( stockCode[4:6] == '00' or stockCode[4:6] == '60' ) and stcokName[0:2] != 'ST' and stcokName[0:3] != '*ST'  and stcokName[0:1] != 'C'   and stcokName[0:1] != 'N':
-                    # stockZtList.append(stockCode[4:],stcokName,stockZf) 
-                    stockZtList2.append( [ stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] )
-                    # stockZtList = [stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] # 股票价格列表放到数组
-                    # arr.array(i,stockZtList) 
-                    # print(stockCode[4:],stcokName,stockZf,stockMcj)  
+                    stockZtList.append( [ stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] )
+ 
                     strRepost +=  str(stockCode[4:])+','+str(stcokName)+','+str(stockZf)+' | \r\n'
                     stockInc(stockCode[4:])
                     if iLine % 2 == 0:  
@@ -162,11 +152,8 @@ def szzt( urlsh ,dbType=1):
             # 创业板显示 and stockCode[4:2] == '30' 
             if dbType == 3:
                 if stockMcj == 0.0 and ( stockCode[4:6] == '30' or stockCode[4:6] == '68' ) and stcokName[0:2] != 'ST' and stcokName[0:3] != '*ST'  and stcokName[0:1] != 'C'   and stcokName[0:1] != 'N':
-                    # stockZtList.append(stockCode[4:],stcokName,stockZf) 
-                    stockZtList3.append( [ stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] )
-                    # stockZtList = [stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] # 股票价格列表放到数组
-                    # arr.array(i,stockZtList) 
-                    # print(stockCode[4:],stcokName,stockZf,stockMcj)  
+                    stockZtList.append( [ stockCode[4:],getStockInc(stockCode[4:]),stcokName,stockZf] )
+ 
                     strRepost +=  str(stockCode[4:])+','+str(stcokName)+','+str(stockZf)+' | \r\n'
                     stockInc(stockCode[4:])
                     if iLine % 2 == 0:  
@@ -192,36 +179,41 @@ def szzt( urlsh ,dbType=1):
 
     else:  
         print("请求失败，状态码：", response.status_code)
-    return strRepost
 
+    
+    return stockZtList
+    # return strRepost
 
-
-
-
-def reList(dbType=1): 
-    stockList = ''
+def reList(dbType): 
     # 上证涨幅排行榜
-    stockList += szzt( urlsh,dbType )
+    stockListArr1 = szzt( urlsh,dbType )
     # 深证涨幅排行榜
-    stockList += szzt( urlsz,dbType )
+    stockListArr2 = szzt( urlsz,dbType )
 
-    # while True:  
-            # 执行你的任务  
-            # irand = random.randint(3, 6)
-            # print("程序正在运行...等待",irand)  
-            # time.sleep(irand)  # 暂停irand秒 
-            # 上证涨幅排行榜
-            # stockList += szzt( urlsh )
-            # print( tscodelist(szzt( urlsh ),'SZ') )
-            # 深证涨幅排行榜
-            # stockList += szzt( urlsz )
-    return stockList
+    stockArr = stockListArr1 + stockListArr2
+ 
+    stockZtListOut = sorted(stockArr, key=lambda x:x[1] )  
+    stockListHtml = ''
+    iColore = 0
+    for stockInfo in stockZtListOut[:]:
+        iColorLine = '<font color="#FFFFFF">'
+        if iColore == 0:
+            iColorLine = '<font color="#FF0000">'
+        if iColore == 1:
+            iColorLine = '<font color="#FF4500">'
+        if iColore == 2:
+            iColorLine = '<font color="#FFD700">'
+ 
+        
+        stockListHtml += iColorLine + str(stockInfo[0])+','+str(stockInfo[1])+','+str(stockInfo[2])+','+str(stockInfo[3])+ '</font>' +' ↑ <br>'
+        iColore = iColore +1
+    return stockListHtml
 
 
-print( reList(1) )
-print( reList(2) )
-print( reList(3) )
-
+# print( reList(2)  )
+# reList(2)
+# print(  )
+# reList(3)
 
 # print('---------------------------------------------------')
 # stockZtList1 = sorted(stockZtList1, key=lambda x: (x[1], x[0]))  

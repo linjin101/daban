@@ -61,14 +61,14 @@
     });
     </script>
 <script> 
-    iclear = 0;
+    // iclear = 0;
     // 模拟命令行输出
     function simulateCommand(terminal,command) {
         var terminal = document.getElementById(terminal);
-        if ( iclear % 6 == 0){
-            terminal.innerHTML = '';
-        }
-        terminal.innerHTML += '$ ' + command + '<br><br>';
+        // if ( iclear % 6 == 0){
+        // terminal.innerHTML = '';
+        // }
+        terminal.innerHTML = '$ ' + command + '<br><br>';
         // $('#'+terminal).html('$ ' + command + '<br>');
         // 这里可以添加逻辑来执行命令并获取输出
         // terminal.innerHTML += '<br>输出: 模拟命令执行结果<br>';
@@ -85,8 +85,8 @@
                     // simulateCommandClear();
                     // simulateCommand('cmd..........'+new Date()+response);
                     simulateCommand('terminal',date.toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'})+'\r\n<br>'+response);
-                    var $div1 = $('#terminal');  
-                    $div1.scrollTop($div1[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
+                    // var $div1 = $('#terminal');  
+                    // $div1.scrollTop($div1[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
                     // 请求成功后的回调函数
                     console.log('数据获取成功:', response);
                     // 这里可以处理获取到的数据，例如显示在页面上等
@@ -105,8 +105,8 @@
                     // simulateCommandClear();
                     // simulateCommand('cmd..........'+new Date()+response);
                     simulateCommand('terminal2',date.toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'})+'\r\n<br>'+response);
-                    var $div2 = $('#terminal2');
-                    $div2.scrollTop($div2[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
+                    // var $div2 = $('#terminal2');
+                    // $div2.scrollTop($div2[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
                     // 请求成功后的回调函数
                     console.log('数据获取成功:', response);
                     // 这里可以处理获取到的数据，例如显示在页面上等
@@ -125,8 +125,8 @@
                     // simulateCommandClear();
                     // simulateCommand('cmd..........'+new Date()+response);
                     simulateCommand('terminal3',date.toLocaleString('zh-CN', {timeZone:'Asia/Shanghai'})+'\r\n<br>'+response);
-                    var $div3 = $('#terminal3');
-                    $div3.scrollTop($div3[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
+                    // var $div3 = $('#terminal3');
+                    // $div3.scrollTop($div3[0].scrollHeight); // 直接设置scrollTop为scrollHeight 
                     // 请求成功后的回调函数
                     console.log('数据获取成功:', response);
                     // 这里可以处理获取到的数据，例如显示在页面上等
@@ -137,9 +137,6 @@
                 }
             });
 
-
-
-            iclear++;
         },6000
     );
     
