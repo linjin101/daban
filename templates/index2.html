@@ -61,6 +61,32 @@
     });
     </script>
 <script> 
+    function isWorkingHours() {  
+        // 获取当前日期和时间  
+        let now = new Date();  
+    
+        // 获取星期几（0代表周日，1代表周一，...，6代表周六）  
+        let dayOfWeek = now.getDay();  
+    
+        // 检查是否是周一到周五  
+        if (dayOfWeek < 1 || dayOfWeek > 5) {  
+            return false;  
+        }  
+    
+        // 获取当前小时和分钟  
+        let hours = now.getHours();  
+        let minutes = now.getMinutes();  
+    
+        // 将时间转换为分钟表示，以便进行比较  
+        let currentTimeInMinutes = hours * 60 + minutes;  
+    
+        // 定义工作时间段的开始和结束（分钟表示）  
+        let startTimeInMinutes = 9 * 60 + 15; // 9点15分  
+        let endTimeInMinutes = 15 * 60; // 下午3点（即15点）  
+    
+        // 检查当前时间是否在工作时间段内  
+        return currentTimeInMinutes >= startTimeInMinutes && currentTimeInMinutes <= endTimeInMinutes;  
+    }  
     // iclear = 0;
     // 模拟命令行输出
     function simulateCommand(terminal,command) {
@@ -74,6 +100,7 @@
         // terminal.innerHTML += '<br>输出: 模拟命令执行结果<br>';
     }
  
+    // if ( isWorkingHours() ){
     // 模拟用户输入命令
     setInterval(function(){
         var date = new Date();
@@ -139,6 +166,7 @@
 
         },6000
     );
+    // }
     
     // simulateCommand('{{ cmdlist }}');
 </script>

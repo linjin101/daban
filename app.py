@@ -4,8 +4,8 @@ import caiji2
 
 app = Flask(__name__)
 # 服务器配置
-# ipconfig = '127.0.0.1:5000'
-# ipconfigHtml = 'sanhu918.com:5555'
+ipconfig = '127.0.0.1:5000'
+ipconfigHtml = 'sanhu918.com:5555'
 # # 本地调试配置
 ipconfig = '127.0.0.1:5000'
 ipconfigHtml = ipconfig
