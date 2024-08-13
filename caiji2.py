@@ -21,7 +21,19 @@ r = redis.StrictRedis(host='localhost', port=6379, db=0)
 # redis累加
 def stockInc(rstock):
     rdate = time.strftime( "%Y-%m-%d", time.localtime() )
-    r.incrby(rdate+':'+rstock,1)
+    expire_time_in_seconds = 24 * 60 * 60  # 48小时  
+
+    # 尝试设置key的值，如果key不存在（NX）  
+    if r.setnx(rdate+':'+rstock, expire_time_in_seconds):  
+        # 设置过期时间  
+        r.expire(rdate+':'+rstock, expire_time_in_seconds)  
+        r.incrby(rdate+':'+rstock,1)
+    else:  
+        # 如果key已存在，则累加  
+        # 注意：这里并没有再次检查key的过期时间，因为设置过期时间和累加操作是分开的  
+        # 在实际应用中，你可能需要设计一种机制来定期更新过期时间，或者接受一定的过期时间误差  
+        r.incrby(rdate+':'+rstock,1)
+
 # 获取redis累加值 
 def getStockInc(rstock):
     rdate = time.strftime( "%Y-%m-%d", time.localtime() )
