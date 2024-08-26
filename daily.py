@@ -80,16 +80,18 @@ def stockListPrice(yesterday):
 
 # 获取当前日期
 today = datetime.now()
-i=1
+i=0
+# 采集range(1)几天前的数据
 for i in range(1):  
     # 计算昨天的日期和时间  
     yesterday = today - timedelta(days=i) 
     # 这里写你想要在循环中执行的代码  
     print(i)  # 例如，打印当前的循环次数
-    try: 
-        stockListPrice(yesterday)
-    except:
-        print("except!")
+    print(yesterday)
+    # try: 
+    #     stockListPrice(yesterday)
+    # except:
+    #     print("except!")
 
 # 30 和 68
 # SELECT *
@@ -110,10 +112,13 @@ for i in range(1):
 # and ( SUBSTRING(st.ts_code, 1, 2) = '00' or SUBSTRING(st.ts_code, 1, 2) = '60' )
 
 # MA60
-# select ROUND(AVG(a.`close`),2) avgclose from (
-# SELECT st.`close`
+# select ROUND(AVG(a.cl),2) avgclose from (
+# -- 当前价格写入
+# select  14.88 as cl ,curdate() as da
+# union
+# SELECT st.`close` as cl,st.trade_date as da
 # FROM `stock_data` st
 # where st.ts_code = '300531.SZ'
-# order by st.trade_date desc
-# limit 0,60 -- MA60
+# order by  da desc
+# limit 1,60 -- MA60
 # ) a
