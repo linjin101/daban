@@ -82,16 +82,16 @@ def stockListPrice(yesterday):
 today = datetime.now()
 i=0
 # 采集range(1)几天前的数据
-for i in range(1):  
+for i in range(60):  
     # 计算昨天的日期和时间  
     yesterday = today - timedelta(days=i) 
     # 这里写你想要在循环中执行的代码  
     print(i)  # 例如，打印当前的循环次数
     print(yesterday)
-    # try: 
-    #     stockListPrice(yesterday)
-    # except:
-    #     print("except!")
+    try: 
+        stockListPrice(yesterday)
+    except:
+        print("except!")
 
 # 30 和 68
 # SELECT *

@@ -217,7 +217,6 @@ def reList(dbType):
         if iColore == 2:
             iColorLine = '<font color="#FFD700">'
  
-        
         stockListHtml += iColorLine + str(stockInfo[0])+','+str(stockInfo[1])+','+str(stockInfo[2])+','+str(stockInfo[3])+ '</font>' +' ↑ <br>'
         iColore = iColore +1
     return stockListHtml

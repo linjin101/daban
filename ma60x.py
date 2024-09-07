@@ -108,20 +108,32 @@ def MAsx(stockcode,maxx,currprice):
 # print( MAxx('300531.SZ',60,14.61) )
 # print( YMAxx('300531.SZ',60) )
 
-print( MAsx('300531.SZ',60,14.61) )
+print( MAsx('300531.SZ',60,11.35) )
 
-# MAxx 当前MA价格
+# MAxx 今天当前MA价格
 # select ROUND(AVG(a.cl),2) avgclose from (
 # -- 当前价格写入
-# select  14.61 as cl ,curdate() as da
+# select  12.18 as cl ,curdate() as da
 # union
 # select s.cl,s.da from (
 # SELECT st.`close` as cl,st.trade_date as da
 # FROM `stock_data` st
 # where st.ts_code = '300531.SZ'
 # order by  da desc
-# limit 1,4 -- MA60
+# limit 0,60 -- MA60 今天0
 # ) s
 # ) a
 
 # 昨日MAxx价格
+# select ROUND(AVG(a.cl),2) avgclose from (
+# -- 当前价格写入
+# select  12.18 as cl ,curdate() as da
+# union
+# select s.cl,s.da from (
+# SELECT st.`close` as cl,st.trade_date as da
+# FROM `stock_data` st
+# where st.ts_code = '300531.SZ'
+# order by  da desc
+# limit 1,60 -- MA60 昨日1开头
+# ) s
+# ) a
