@@ -18,13 +18,27 @@ def fetch_stock_increase_ranking(url):
         # 假设每个股票数据包含'symbol'（股票代码）、'name'（股票名称）和'changepercent'（涨幅）等字段  
         # 注意：这里的字段名（如'symbol', 'name', 'changepercent'）需要根据实际返回的JSON结构来确定  
             if 'symbol' in stock and 'name' in stock and 'changepercent' in stock:  
-                print(f"股票代码: {stock['symbol']}, 股票名称: {stock['name']}, 涨幅: {stock['changepercent']}%")  
+                print(f"股票代码: {stock['symbol']}, 股票名称: {stock['name'].ljust(6)},涨幅: {stock['changepercent']}%,卖价：{stock['sell']},开盘{stock['open']},高{stock['high']},低{stock['low']},")  
                
     except requests.RequestException as e:  
         print(f"请求出错: {e}")  
   
-# 使用示例  
-url = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=99&sort=changepercent&asc=0&node=hs_a&symbol=&_s_r_a=init'  
+# js列表 https://vip.stock.finance.sina.com.cn/mkt/js/stock_list_cn.js?ts=202002271549
+# sian财经行情全部A股
+url = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=100&sort=changepercent&asc=0&node=hs_a&symbol=&_s_r_a=init'  
+
+# sian财经行情 上证A股
+# url = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=100&sort=changepercent&asc=0&node=sh_a&symbol=&_s_r_a=init'  
+
+# sian财经行情 深证A股
+# url = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=100&sort=changepercent&asc=0&node=sz_a&symbol=&_s_r_a=init'  
+
+# sina财经行情 创业板
+# url = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=80&sort=changepercent&asc=0&node=cyb&symbol=&_s_r_a=sort'
+
+# sina财经行情 科创板
+# url = 'https://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/Market_Center.getHQNodeData?page=1&num=80&sort=changepercent&asc=0&node=kcb&symbol=&_s_r_a=sort'
+
 fetch_stock_increase_ranking(url)
 
 

@@ -144,21 +144,31 @@ def execute_insert(connection, query, params=None):
         cursor.execute(query,params)  
         connection.commit()  
     except Error as e:  
-        print(f"执行查询错误: {e}")  
+        print(f"执行查询错误: {e}") 
+    finally:  
+        if connection.is_connected():  
+            cursor.close()  
 
 
 def fetch_concept_caiji():  
     connection = connect_to_mysql()  
     if connection:  
         # 查询最新的trade_date和对应的ts_code  
-        query = f"""
-        SELECT left(sd.ts_code, 6) as ts_code, sd.trade_date  
-        FROM `stock_data` sd  
-        WHERE sd.trade_date = (SELECT MAX(sd2.trade_date) FROM `stock_data` sd2)  
-        """  
         # query = f"""
-        # SELECT left(sd.ts_code, 6) as ts_code, sd.trade_date  FROM `stock_data` sd  limit 0,10 
-        # """
+        # SELECT left(sd.ts_code, 6) as ts_code, sd.trade_date  
+        # FROM `stock_data` sd  
+        # WHERE sd.trade_date = (SELECT MAX(sd2.trade_date) FROM `stock_data` sd2)  
+        # """  
+
+        query = f"""
+        select * from (
+            SELECT left(sd.ts_code, 6) as ts_code, sd.trade_date  
+            FROM `stock_data` sd  
+            WHERE sd.trade_date = (SELECT MAX(sd2.trade_date) FROM `stock_data` sd2)  
+            ) ts
+            where ts.ts_code not in (select sc.ts_code from stock_concepts sc   ) 
+        """
+
         results = execute_query(connection, query)  
         print(results)
           
@@ -196,6 +206,13 @@ if __name__ == "__main__":
 # FROM `stock_data` sd
 # where sd.trade_date = (select max(sd2.trade_date) from `stock_data` sd2)
 
+# 采集程序由于mysql连接过多中断，取没有采集完的ts_code
+# select * from (
+# SELECT left(sd.ts_code, 6) as ts_code, sd.trade_date  
+# FROM `stock_data` sd  
+# WHERE sd.trade_date = (SELECT MAX(sd2.trade_date) FROM `stock_data` sd2)  
+# ) ts
+# where ts.ts_code not in (select sc.ts_code from stock_concepts sc   ) 
 
 # 概念查询
 # select * from  `stock_concepts`  sc
